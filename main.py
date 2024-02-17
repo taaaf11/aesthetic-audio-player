@@ -1,9 +1,10 @@
 import flet as ft
+from flet import icons
 
 from aesthetic_audioplayer import AestheticAudioPlayer
 
-
 _current_theme_mode = None
+window_always_on_top = None
 
 # can't use None(var)
 none_r = lambda var: None if var == "None" else var
@@ -19,6 +20,10 @@ def main(page: ft.Page):
     page.window_frameless = True
     page.window_width = 401
     page.window_height = 496
+
+    global window_always_on_top
+    window_always_on_top = False
+    page.window_always_on_top = window_always_on_top
 
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
@@ -95,25 +100,31 @@ def main(page: ft.Page):
         page.client_storage.set("Aesthetic Vibes Image", "None")
         page.client_storage.set("Aesthetic Vibes Color Scheme Seed", "None")
 
+    def switch_windows_always_on_top(e):
+        global window_always_on_top
+        page.window_always_on_top = not window_always_on_top
+        window_always_on_top = not window_always_on_top
+        page.update()
+
     page.appbar = ft.AppBar(
         title=ft.WindowDragArea(ft.Text(page.title)),
         center_title=True,
         leading=ft.IconButton(
-            ft.icons.MENU_SHARP, on_click=lambda _: page.show_drawer(page.drawer)
+            icons.MENU_SHARP, on_click=lambda _: page.show_drawer(page.drawer)
         ),
     )
 
     page.drawer = ft.NavigationDrawer(
         controls=[
             ft.NavigationDrawerDestination(
-                icon=ft.icons.HOME_OUTLINED,
+                icon=icons.HOME_OUTLINED,
                 label="Home",
-                selected_icon=ft.icons.HOME_SHARP,
+                selected_icon=icons.HOME_SHARP,
             ),
             ft.NavigationDrawerDestination(
-                icon=ft.icons.SETTINGS_OUTLINED,
+                icon=icons.SETTINGS_OUTLINED,
                 label="Settings",
-                selected_icon=ft.icons.SETTINGS_SHARP,
+                selected_icon=icons.SETTINGS_SHARP,
             ),
         ],
         selected_index=0,
@@ -152,14 +163,13 @@ def main(page: ft.Page):
                         text_align=ft.TextAlign.CENTER,
                     ),
                     ft.IconButton(
-                        icon=ft.icons.FOLDER_OUTLINED,
+                        icon=icons.FOLDER_OUTLINED,
                         on_click=select_image,
                     ),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 spacing=0,
             ),
-
             # music folder selection controls
             ft.Row(
                 [
@@ -169,32 +179,29 @@ def main(page: ft.Page):
                         text_align=ft.TextAlign.CENTER,
                     ),
                     ft.IconButton(
-                        icon=ft.icons.FOLDER_OUTLINED,
+                        icon=icons.FOLDER_OUTLINED,
                         on_click=select_audio_folder,
                     ),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 spacing=0,
             ),
-
             # delete app data button
             ft.Row(
                 [
                     ft.Text(
                         "Delete app data: ", size=20, text_align=ft.TextAlign.CENTER
                     ),
-                    ft.IconButton(icon=ft.icons.DELETE, on_click=del_app_data),
+                    ft.IconButton(icon=icons.DELETE, on_click=del_app_data),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 spacing=0,
             ),
-
             # theme mode switch button
             ft.IconButton(
                 content=ft.Text("󰔎  Switch theme", size=20, font_family="Symbols-NF"),
                 on_click=switch_theme_mode,
             ),
-
             # specify color scheme seed text_field and submit button
             ft.Row(
                 [
@@ -204,9 +211,14 @@ def main(page: ft.Page):
                         ),
                         width=page.width / 4,
                     ),
-                    ft.IconButton(icon=ft.icons.CHECK, on_click=set_color_scheme),
+                    ft.IconButton(icon=icons.CHECK, on_click=set_color_scheme),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
+            ),
+            # window always on top
+            ft.IconButton(
+                icon=icons.TOPIC,
+                on_click=switch_windows_always_on_top,
             ),
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
