@@ -18,8 +18,8 @@ def main(page: ft.Page):
     page.title = "Aesthetic Audio Player"
 
     page.window_frameless = True
-    page.window_width = 401
-    page.window_height = 496
+    page.window_width = 386
+    page.window_height = 500
 
     global window_always_on_top
     window_always_on_top = False
@@ -44,20 +44,31 @@ def main(page: ft.Page):
         "Symbols-NF": "SymbolsNerdFont-Regular.ttf",
     }
 
-    def navigate_to_page(e):
-        selected_page = e.control.selected_index
-        if selected_page == 0:
+    def _switch_visible_page(idx):
+        if idx == 0:
             main_page.visible = True
             settings_page.visible = False
 
             page.scroll = None
-        elif selected_page == 1:
+        elif idx == 1:
             main_page.visible = False
             settings_page.visible = True
 
             page.scroll = ft.ScrollMode.AUTO
 
+    def navigate_to_page(e):
+        selected_page = e.control.selected_index
+        _switch_visible_page(selected_page)
+
         page.close_drawer()
+        page.update()
+
+    def handle_keyboard_shortcuts(e: ft.KeyboardEvent):
+        if e.ctrl:
+            if e.key == ",":
+                _switch_visible_page(1)
+            elif e.key == ".":
+                _switch_visible_page(0)
         page.update()
 
     def switch_theme_mode(e):
@@ -149,7 +160,6 @@ def main(page: ft.Page):
             font_family="Comfortaa",
             controls_vertical_alignment=ft.MainAxisAlignment.CENTER,
             controls_horizontal_alignment=ft.CrossAxisAlignment.CENTER,
-            width=page.width / 2,
         )
 
     settings_page = ft.Column(
@@ -227,6 +237,9 @@ def main(page: ft.Page):
     )
 
     page.add(main_page, settings_page)
+
+    # page.on_resize = lambda _: print(page.window_width, page.window_height)
+    page.on_keyboard_event = handle_keyboard_shortcuts
 
 
 ft.app(main)
