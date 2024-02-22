@@ -19,7 +19,7 @@ def main(page: ft.Page):
 
     page.window_frameless = True
     page.window_width = 386
-    page.window_height = 500
+    page.window_height = 435
 
     global window_always_on_top
     window_always_on_top = False
@@ -107,9 +107,9 @@ def main(page: ft.Page):
         filepicker.pick_files("Select image")
 
     def del_app_data(e):
-        page.client_storage.set("Aesthetic Vibes Music Folder", "None")
-        page.client_storage.set("Aesthetic Vibes Image", "None")
-        page.client_storage.set("Aesthetic Vibes Color Scheme Seed", "None")
+        page.client_storage.remove("Aesthetic Vibes Music Folder")
+        page.client_storage.remove("Aesthetic Vibes Image")
+        page.client_storage.remove("Aesthetic Vibes Color Scheme Seed")
 
     def switch_windows_always_on_top(e):
         global window_always_on_top
@@ -117,13 +117,13 @@ def main(page: ft.Page):
         window_always_on_top = not window_always_on_top
         page.update()
 
-    page.appbar = ft.AppBar(
-        title=ft.WindowDragArea(ft.Text(page.title)),
-        center_title=True,
-        leading=ft.IconButton(
-            icons.MENU_SHARP, on_click=lambda _: page.show_drawer(page.drawer)
-        ),
-    )
+    # page.appbar = ft.AppBar(
+    #     title=ft.WindowDragArea(ft.Text(page.title)),
+    #     center_title=True,
+    #     leading=ft.IconButton(
+    #         icons.MENU_SHARP, on_click=lambda _: page.show_drawer(page.drawer)
+    #     ),
+    # )
 
     page.drawer = ft.NavigationDrawer(
         controls=[

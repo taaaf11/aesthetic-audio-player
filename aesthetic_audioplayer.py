@@ -54,16 +54,19 @@ class AestheticAudioPlayer(AudioPlayer):
 
         # in the parent class, self.contents contains only bare music controls
         # now I add some bells and swings to it
-        self.contents = [self.image, self.song_name] + self.contents  # of parent class
+        self.contents = [
+            ft.WindowDragArea(self.image),
+            self.song_name,
+        ] + self.contents  # of parent class
 
         self.content = ft.Column(
             self.contents, horizontal_alignment=controls_horizontal_alignment
         )
-    
+
     @property
     def font_family(self):
         return self.__font_family
-    
+
     @font_family.setter
     def font_family(self, value):
         for text_control in self.times_row.controls:
