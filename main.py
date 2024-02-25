@@ -6,9 +6,6 @@ from aesthetic_audioplayer import AestheticAudioPlayer
 _current_theme_mode = None
 window_always_on_top = None
 
-# can't use None(var)
-none_r = lambda var: None if var == "None" else var
-
 
 def main(page: ft.Page):
     music_folder_path = page.client_storage.get("Aesthetic Vibes Music Folder")
@@ -29,9 +26,7 @@ def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
 
     page.theme = ft.Theme(
-        color_scheme_seed=(
-            "Pink" if none_r(color_scheme_seed) is None else color_scheme_seed
-        ),
+        color_scheme_seed=("Pink" if color_scheme_seed is None else color_scheme_seed),
         font_family="Comfortaa",
     )
     page.theme_mode = ft.ThemeMode.SYSTEM
@@ -142,12 +137,12 @@ def main(page: ft.Page):
         on_change=navigate_to_page,
     )
 
-    if none_r(music_folder_path) is None:
+    if music_folder_path is None:
         main_page = ft.Text(
             "Please select musics folder in settings menu, and restart."
         )
     else:
-        if none_r(image_src) is None:
+        if image_src is None:
             image_src = "aesthetic_vibes.jpg"
 
         main_page = AestheticAudioPlayer(
